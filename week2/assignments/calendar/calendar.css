@@ -29,3 +29,10 @@
   padding: 3px;
   background-color: silver;
 }
+
+#flex-container {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin: 5px;
+}
