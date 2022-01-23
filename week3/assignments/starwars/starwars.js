@@ -1,23 +1,32 @@
-// declare any necessary variables
-
-// define a function called 'fetchData()' that passes the values from 
-// the 'queryType' and 'itemID' elements in starwars.html to the function 
-// called 'getFromSWAPI()'
+let queryType, itemID;
+function fetchData(){
+    queryType = document.getElementById('queryType').value;
+    itemID = parseInt(document.getElementById('itemID').value);
+    getFromSWAPI()
+};
 
 function getFromSWAPI() {
-    // assign values to any necessary variables
     fetch(`https://swapi.dev/api/${queryType}/${itemID}`)
-    .then(function (response) {
-        return response.json()
+    .then(response => response.json())
+    .then(function (data){
+        console.log(data);
+        let name = data.name;
+        let url = data.url;
+        updateInfo(name,url)
     })
-    .then(function(data){
-        updateInfo(data)
-    })
-    .catch(function(err) {
-        console.warn(err)
-    })
-}
-
+    .catch(err => console.warn(err)) 
+};
+function updateInfo(name, url){
+    let dataLabel1 = document.getElementById('dataLabel1');
+    let newData = document.createElement('div');
+    newData.innerHTML = `Name: ${name}`;
+    dataLabel1.append(newData);
+    
+    let dataLabel2 = document.getElementById('dataLabel2');
+    let newData2 = document.createElement('div');
+    newData2.innerHTML = `URL: ${url}`;
+    dataLabel2.append(newData2);
+};
 // create a new function called 'updateInfo()' that receives the data from 
 // the call to that function (see above). Use logic to write the appropriate
 //labels to 'dataLabel1' and 'dataLabel2' elements in starwars.html, as well
