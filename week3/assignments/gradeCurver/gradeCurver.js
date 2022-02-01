@@ -23,7 +23,6 @@ function applyBell(grade, index, ary) {
             break
     }
 }
-
 function convertArray(obj) {
     ary = obj.value.split(',')
     ary = ary.map(function (x) {
