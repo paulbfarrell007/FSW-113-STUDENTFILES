@@ -22,109 +22,84 @@ const parts = [
 
 ]
 
-
 // list of each part number and qty for check-off in the "detailsList" element
-var supplyList = document.querySelector("#detailsList");
-    parts.forEach(function (e, i) {
-    let needElement = document.createElement("div");
-    let newElement = document.createElement("input");
+var myList = document.querySelector("#detailsList");
+parts.forEach(function(element, index){
+    let parentElement = document.createElement("div");
+    let newPart = document.createElement("input");
+    newPart.setAttribute("type", "checkbox");
+    let newLabel = document.createElement("label");
+    newLabel.textContent = `${parts[index].qty} (${parts[index].partNbr}) - ${parts[index].partDescr}`;
+    myList.appendChild(parentElement);
+    parentElement.appendChild(newPart);
+    parentElement.appendChild(newLabel);
+});
+// if parts requiring special handling exist (in aisle B3), list of items needing 
+// special packaging in the "specialPackaging" element, else remove element
 
-    newElement.setAttribute("type", "checkbox"); //created checkbox same as in html creating a type in input
-
-    let partsLabel = document.createElement("label"); //to list qty, parts#'s and descriptions
-    
-    partsLabel.textContent = `${parts[i].qty} (${parts[i].partNbr}) - ${parts[i].partDescr}`;
-    supplyList.append(needElement);
-    needElement.append(newElement);
-    needElement.append(partsLabel);
+var specialPackage = document.querySelector("#specialPackaging");
+var b3Filter = parts.filter(function(element, index){
+    return parts[index].aisle === "B3";
 });
 
-
-
-
-/* if parts requiring special handling exist (in aisle B3), list of items needing special packaging in the "specialPackaging" element, else remove element */
-
-var specialDelivery = document.querySelector("#specialPackaging");
-var fragile = parts.filter(function (e, i) {
-    return parts[i].aisle === "B3";
-});
-
-if (fragile.length !== 0) {
-    fragile.forEach(function (e, i) {
-        let revisedPackage = document.createElement("p");
-        revisedPackage.textContent = `Item: ${fragile[i].partNbr} / Qty: ${fragile[i].qty}`;
-        specialDelivery.appendChild(revisedPackage);
+if (b3Filter.length !== 0 ) {
+    b3Filter.forEach(function(element, index){
+        let newSpecialPackage = document.createElement("p");
+        newSpecialPackage.textContent = `Item: ${b3Filter[index].partNbr} / Qty: ${b3Filter[index].qty}`;
+        specialPackage.appendChild(newSpecialPackage);
     })
-
+   
 } else {
-    specialDelivery.remove(); //else remove element
+    specialPackage.remove();
 }
 
-
-
-
-/* if hazardous parts exist (in aisle J4), let employee know in the "hazardousMaterials" element and remind them to get gloves, else remove element */
-
-var hazardItem = document.querySelector("#hazardousMaterials");
-var dangerous = parts.some(function (e, i) {
-    return parts[i].aisle === "J4";
+// if hazardous parts exist (in aisle J4), let employee know in the "hazardousMaterials"
+// element and remind them to get gloves, else remove element
+var hazardMaterials = document.querySelector("#hazardousMaterials");
+var hazardous = parts.some(function(element, index){
+    return parts[index].aisle === "J4";
 })
 
-if (dangerous !== true) {
-    hazardItem.remove(); //else remove element
-} 
-
-else {
-    let memo = document.createElement("p");
-    memo.textContent = "WARNING!! These parts contain hazardous material, you MUST wear gloves";
-    hazardItem.appendChild(memo);
+if (hazardous !== true) {
+    hazardMaterials.remove();
+} else {
+    let hazardNote = document.createElement("p");
+    hazardNote.textContent = "Wear Gloves While Loading!";
+    hazardMaterials.appendChild(hazardNote);
 }
 
-
-
-
-/* if all items in the order are small parts (aisle H1), then let employee know that they should take a basket and go directly to aisle H1 */
-
-var smallParts = document.querySelector("#smallItemsOnly")
-var moveParts = parts.every(function (e, i) {
-    return parts[i].aisle === "H1";
+// if all items in the order are small parts (aisle H1), then let employee know that they should take 
+// a basket and go dirctly to aisle H1
+var smallItems = document.querySelector("#smallItemsOnly")
+var small = parts.every(function(element, index){
+    return parts[index].aisle ==="H1";
 })
 
-if (moveParts !== true) {
-    smallParts.remove(); //must remove element to know whats left over 
+if (small !== true) {
+    smallItems.remove();
 } else {
-    let memo2 = document.createElement("p");
-    memo2.textContent = "if all ordered items are small, take a Basket and go directly to aisle H1";
-    smallParts.appendChild(memo2);
+    let smallItemsNote = document.createElement("p");
+    smallItemsNote.textContent ="Take a Basket and Report Directly to Aisle H1";
+    smallItems.appendChild(smallItemsNote);
 }
-
-
-
-
-/* if there are large items (anthing in aisles S, T, or U), then let the employee know in the "forkiftNeeded"
-element that they will need to reserve a forklift, else remove the element */
-
-var heavyLoad = document.querySelector("#forkiftNeeded");
-var reserveLift = parts.find(function (e, i) {
-    return parts[i].aisle === "S" + parts[i].aisle === "T" + parts[i].aisle === "U";
+// if there are large items (anthing in aisles S, T, or U), then let the employee know in the "forkiftNeeded"
+// element that they will need to reserve a forklift, else remove the element
+var forklift = document.querySelector("#forkiftNeeded");
+var forkift2 = parts.find(function(element, index){
+    return parts[index].aisle === "S" || parts[index].aisle === "T" || parts[index].aisle === "U";
 })
 
-if (reserveLift == undefined) {
-    heavyLoad.remove() // remove element
+if (forkift2 == undefined){
+    forklift.remove();
 } else {
-    let memo3 = document.createElement("p");
-    memo3.textContent = "The load is to Heavy. You will need to reserve a ForkLift.";
-    heavyLoad.appendChild(memo3);
+    let forkliftNote = document.createElement("p");
+    forkliftNote.textContent ="Forklift Needed!";
+    forklift.appendChild(forkliftNote);
 }
-
-
-
-
 // sum up the total number of parts and append that number to the text already in "totalItems" element
-var subTotal = document.querySelector("#totalItems");
-var grandTotal = parts.reduce(function (oldAmount, newAmount) {
-    return oldAmount + newAmount.qty
-}, 0) //added #0 to avoid error object message
-     
+var total = document.querySelector("#totalItems");
+var totalItem = parts.reduce(function(previousValue, currentValue){
+    return previousValue + currentValue.qty
+}, 0);
 
-subTotal.textContent += ` : ${grandTotal}`;
+total.textContent += ` : ${totalItem}`;
