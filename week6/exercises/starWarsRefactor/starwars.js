@@ -15,7 +15,7 @@ function fetchData(){
             console.warn(err)
         })
 }
-
+  
 const getSWAPI = async() => {
     const response = await fetch(`https://swapi.dev/api/${queryType}/${itemID}`)
     data = await response.json()
