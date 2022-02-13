@@ -1,7 +1,7 @@
 import setCustomer from './data.js'
 
 let customer
-
+ 
 document.querySelector('#customer-id')
     .addEventListener(
         'change', function () {

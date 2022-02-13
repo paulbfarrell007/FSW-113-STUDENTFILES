@@ -10,7 +10,7 @@ export default class objCustomer {
         this.aryPurchases = args[7],
         this.aryPayments = args[8]
     }
-    
+     
     sumPurchases() {
         let allPurchases = this.aryPurchases.reduce((currentTotal, item) => {
                 return item.price + currentTotal

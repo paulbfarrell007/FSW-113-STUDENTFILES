@@ -1,7 +1,7 @@
 import objCustomer from './customer.js'
 
 let customer
-
+ 
 export default function setCustomer(id) {
     switch (id) {
         case '1': 
