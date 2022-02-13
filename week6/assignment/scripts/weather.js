@@ -11,7 +11,7 @@ let awaitUpdate;
 // create an event listener for the click of the goBttn that calls a function to fetch the weather data
 document.querySelector("#goBttn").addEventListener("click", () => fetchWeather())
 async function getData() {
-    let theWeather = await fetch(`api.openweathermap.org/data/2.5/weather?id=524901&appid=a5d2764019a97e6412eed525fdb5a5e6`) //my API Key
+    let theWeather = await fetch(`https://api.openweathermap.org/data/2.5/weather?id=524901&appid=a5d2764019a97e6412eed525fdb5a5e6`) //my API Key
     awaitUpdate = await theWeather.json()
     return (awaitUpdate)
 
